@@ -330,12 +330,16 @@ export class Seq extends CodeRep {
   }
 
   emit(ts, noIn) {
-    this.children.forEach(cr => cr.emit(ts, noIn));
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].emit(ts, noIn);
+    }
   }
 
   forEach(f) {
     f(this);
-    this.children.forEach(x => x.forEach(f));
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].forEach(f);
+    }
   }
 }
 
@@ -353,19 +357,23 @@ export class CommaSep extends CodeRep {
 
   emit(ts, noIn) {
     let first = true;
-    this.children.forEach(cr => {
+    for (let i = 0; i < this.children.length; i++) {
       if (first) {
         first = false;
       } else {
         ts.put(',');
       }
-      cr.emit(ts, noIn);
-    });
+      this.children[i].emit(ts, noIn);
+    }
+
   }
 
   forEach(f) {
     f(this);
-    this.children.forEach(x => x.forEach(f));
+    // this.children.forEach(x => x.forEach(f));
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].forEach(f);
+    }
   }
 }
 

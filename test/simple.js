@@ -43,12 +43,12 @@ let CommaSep = require('../').CommaSep;
 let SemiOp = require('../').SemiOp;
 
 
-describe('API', () => {
-  it('should exist', () => {
+suite('API', () => {
+  test('should exist', () => {
     expect(typeof codeGen).be('function');
   });
 
-  it('should export the various codereps', () => {
+  test('should export the various codereps', () => {
     expect(typeof Precedence).be('object');
     expect(typeof getPrecedence).be('function');
     expect(typeof escapeStringLiteral).be('function');
@@ -69,8 +69,8 @@ describe('API', () => {
 
 });
 
-describe('everything.js', () => {
-  it('should round trip', () => {
+suite('everything.js', () => {
+  test('should round trip', () => {
     let source;
 
     source = '' + fs.readFileSync(require.resolve('everything.js/es2015-module'));
@@ -81,9 +81,9 @@ describe('everything.js', () => {
   });
 });
 
-describe('Code generator', () => {
+suite('Code generator', () => {
 
-  describe('generates simple ECMAScript', () => {
+  suite('generates simple ECMAScript', () => {
     function statement(stmt) {
       return { type: 'Script', directives: [], statements: [stmt] };
     }
@@ -144,7 +144,7 @@ describe('Code generator', () => {
       expect(codeGen(parseScript(expected))).be(expected);
     }
 
-    it('Directive', () => {
+    test('Directive', () => {
       testShift('"use strict"',
         { type: 'Script', directives: [{ type: 'Directive', rawValue: 'use strict' }], statements: [] }
       );
@@ -185,7 +185,7 @@ describe('Code generator', () => {
       testModule('"\\\n\'"');
     });
 
-    it('ArrayExpression', () => {
+    test('ArrayExpression', () => {
       testModule('[]');
       testModule('[a]');
       test2('[a]', '[a,]');
@@ -196,7 +196,7 @@ describe('Code generator', () => {
       testModule('[(a,a)]');
     });
 
-    it('SpreadElement', () => {
+    test('SpreadElement', () => {
       testModule('[...a]');
       testModule('[...a,...b]');
       testModule('[...a,b,...c]');
@@ -205,7 +205,7 @@ describe('Code generator', () => {
       testModule('f(...a)');
     });
 
-    it('ObjectExpression', () => {
+    test('ObjectExpression', () => {
       testModule('({})');
       test2('({a:1})', '({a:1,})');
       testModule('({}.a--)');
@@ -245,16 +245,16 @@ describe('Code generator', () => {
       testModule('({...a=[]})');
     });
 
-    it('AwaitExpression', () => {
+    test('AwaitExpression', () => {
       testModule('async function f(){await 0}');
-      testModule('async function f(){await(a+b)}');
+      testModule('async function f(){awatest(a+b)}');
     });
 
-    it('ForAwaitExpression', () => {
+    test('ForAwaitExpression', () => {
       testModule('(async function(){for await(a of b);}())');
     });
 
-    it('ArrayAssignmentTarget', () => {
+    test('ArrayAssignmentTarget', () => {
       testModule('[]=0');
       testModule('[...a]=0');
       testModule('[a,...a]=0');
@@ -264,27 +264,27 @@ describe('Code generator', () => {
       testModule('[a=(0,0)]=0');
     });
 
-    it('ObjectAssignmentTarget', () => {
+    test('ObjectAssignmentTarget', () => {
       testModule('({a=(0,0)}=0)');
       testModule('({a,...b}={})');
       testModule('({}=0)');
       testModule('({...a}={})');
     });
 
-    it('AssignmentTargetPropertyIdentifier', () => {
+    test('AssignmentTargetPropertyIdentifier', () => {
       testModule('({a=0}=0)');
     });
 
-    it('AssignmentTargetPropertyProperty', () => {
+    test('AssignmentTargetPropertyProperty', () => {
       testModule('({a:b}=0)');
     });
 
-    it('AssignmentTargetWithDefault', () => {
+    test('AssignmentTargetWithDefault', () => {
       testModule('[a=0]=0');
       testModule('({a:b=0}=0)');
     });
 
-    it('ArrayBinding', () => {
+    test('ArrayBinding', () => {
       testModule('let[]=0');
       testModule('let[...a]=0');
       testModule('let[a,...b]=0');
@@ -294,27 +294,27 @@ describe('Code generator', () => {
       testModule('let[a=(0,0)]=0');
     });
 
-    it('ObjectBinding', () => {
+    test('ObjectBinding', () => {
       testModule('let{a=(0,0)}=0');
       testModule('let{a,...b}={}');
       testModule('let{}=0');
       testModule('let{...a}={}');
     });
 
-    it('BindingPropertyIdentifier', () => {
+    test('BindingPropertyIdentifier', () => {
       testModule('let{a=0}=0');
     });
 
-    it('BindingPropertyProperty', () => {
+    test('BindingPropertyProperty', () => {
       testModule('let{a:b}=0');
     });
 
-    it('BindingWithDefault', () => {
+    test('BindingWithDefault', () => {
       testModule('let[a=0]=0');
       testModule('let{a:b=0}=0');
     });
 
-    it('ClassDeclaration', () => {
+    test('ClassDeclaration', () => {
       testModule('class A{}');
       testModule('class A extends B{}');
       testModule('class A extends(B,C){}');
@@ -327,7 +327,7 @@ describe('Code generator', () => {
       testModule('class A extends B.C{}');
     });
 
-    it('ClassExpression', () => {
+    test('ClassExpression', () => {
       testModule('(class{})');
       testModule('(class A{})');
       testModule('(class A extends B{})');
@@ -342,7 +342,7 @@ describe('Code generator', () => {
       testModule('(class A extends B.C{})');
     });
 
-    it('ClassElement', () => {
+    test('ClassElement', () => {
       testModule('(class{a(){}})');
       testModule('(class{*a(){}})');
       testModule('(class{static a(){}})');
@@ -350,11 +350,11 @@ describe('Code generator', () => {
       testModule('(class{constructor(){}})');
     });
 
-    it('Sequence', () => {
+    test('Sequence', () => {
       testModule('a,b,c,d');
     });
 
-    it('Assignment', () => {
+    test('Assignment', () => {
       testModule('a=b');
       testModule('a+=b');
       testModule('a*=b');
@@ -377,7 +377,7 @@ describe('Code generator', () => {
       testModule('a[b]=0');
     });
 
-    it('Conditional', () => {
+    test('Conditional', () => {
       testModule('a?b:c');
       testModule('a?b?c:d:e');
       testModule('a?b:c?d:e');
@@ -393,29 +393,29 @@ describe('Code generator', () => {
       testModule('a?b:c||d');
     });
 
-    it('LogicalOr', () => {
+    test('LogicalOr', () => {
       testModule('a||b');
     });
 
-    it('LogicalAnd', () => {
+    test('LogicalAnd', () => {
       testModule('a||b');
     });
 
-    it('BitwiseOr', () => {
+    test('BitwiseOr', () => {
       testModule('a|b');
     });
 
-    it('BitwiseAnd', () => {
+    test('BitwiseAnd', () => {
       testModule('a&b');
     });
 
-    it('BitwiseXor', () => {
+    test('BitwiseXor', () => {
       testModule('a^b');
       testModule('a^b&b');
       testModule('(a^b)&b');
     });
 
-    it('Equality', () => {
+    test('Equality', () => {
       testModule('a==b');
       testModule('a!=b');
       testModule('a==b');
@@ -424,7 +424,7 @@ describe('Code generator', () => {
       testModule('a==(b==c)');
     });
 
-    it('Relational', () => {
+    test('Relational', () => {
       testModule('a<b');
       testModule('a<=b');
       testModule('a>b');
@@ -440,7 +440,7 @@ describe('Code generator', () => {
       testModule('for(b in c in d);');
     });
 
-    it('Shift', () => {
+    test('Shift', () => {
       testModule('a<<b');
       testModule('a>>b');
       testModule('a>>>b');
@@ -451,7 +451,7 @@ describe('Code generator', () => {
       testModule('a<<(b<c)');
     });
 
-    it('Additive', () => {
+    test('Additive', () => {
       testModule('a+b');
       testModule('a-b');
       testModule('a+(b+b)');
@@ -461,7 +461,7 @@ describe('Code generator', () => {
       test2('a*b+c/d', '(a*b)+(c/d)');
     });
 
-    it('Multiplicative', () => {
+    test('Multiplicative', () => {
       testModule('a*b');
       testModule('a/b');
       testModule('a%b');
@@ -475,7 +475,7 @@ describe('Code generator', () => {
       testModule('a/i');
     });
 
-    it('Exponential', () => {
+    test('Exponential', () => {
       testModule('a**b');
       testModule('(a**b)**c');
       testModule('a**b**c');
@@ -489,7 +489,7 @@ describe('Code generator', () => {
       testModule('void(a**b)');
     });
 
-    it('PrefixExpression', () => {
+    test('PrefixExpression', () => {
       testModule('+a');
       testModule('-a');
       testModule('!a');
@@ -509,12 +509,12 @@ describe('Code generator', () => {
       testModule('!!(a+a)');
     });
 
-    it('PostfixExpression', () => {
+    test('PostfixExpression', () => {
       testModule('a++');
       testModule('a--');
     });
 
-    it('NewCallMember', () => {
+    test('NewCallMember', () => {
       testModule('new a');
       testModule('new a(a)');
       testModule('new a(a,b)');
@@ -538,7 +538,7 @@ describe('Code generator', () => {
       testModule('new(a().a)');
     });
 
-    it('LiteralRegExpExpression', () => {
+    test('LiteralRegExpExpression', () => {
       testModule('a/ /b/');
       testModule('/a/');
       testModule('/a/i');
@@ -551,16 +551,16 @@ describe('Code generator', () => {
       testModule('/a/;i');
     });
 
-    it('LiteralBooleanExpression', () => {
+    test('LiteralBooleanExpression', () => {
       testModule('true');
       testModule('false');
     });
 
-    it('LiteralNullExpression', () => {
+    test('LiteralNullExpression', () => {
       testModule('null');
     });
 
-    it('FunctionDeclaration', () => {
+    test('FunctionDeclaration', () => {
       testModule('function f(){}');
       testModule('function*f(){}');
       testModule('function f(a){}');
@@ -569,7 +569,7 @@ describe('Code generator', () => {
       testModule('async function f(){}');
     });
 
-    it('FunctionExpression', () => {
+    test('FunctionExpression', () => {
       testModule('(function(){})');
       testModule('(function f(){})');
       testModule('(function*(){})');
@@ -577,7 +577,7 @@ describe('Code generator', () => {
       testModule('(async function(){})');
     });
 
-    it('ArrowExpression', () => {
+    test('ArrowExpression', () => {
       testModule('a=>a');
       testModule('()=>a');
       test2('a=>a', '(a)=>a');
@@ -603,12 +603,12 @@ describe('Code generator', () => {
       testModule('async(...a)=>0');
     });
 
-    it('NewTargetExpression', () => {
+    test('NewTargetExpression', () => {
       testModule('function f(){new.target}');
       test2('function f(){new.target}', 'function f() { new . target }');
     });
 
-    it('TemplateExpression', () => {
+    test('TemplateExpression', () => {
       testModule('``');
       testModule('````');
       testModule('a``');
@@ -634,12 +634,12 @@ describe('Code generator', () => {
       test2('new``(a)', 'new ``(a)');
     });
 
-    it('Super', () => {
+    test('Super', () => {
       testModule('class A extends B{constructor(){super()}}');
       testModule('({m(){super.m()}})');
     });
 
-    it('YieldExpression', () => {
+    test('YieldExpression', () => {
       testModule('function*f(){yield}');
       testModule('function*f(){yield a}');
       testModule('function*f(){yield 0}');
@@ -652,7 +652,7 @@ describe('Code generator', () => {
       testModule('function*f(){yield yield yield}');
     });
 
-    it('YieldGeneratorExpression', () => {
+    test('YieldGeneratorExpression', () => {
       testModule('function*f(){yield*a}');
       testModule('function*f(){yield*0}');
       testModule('function*f(){yield*{}}');
@@ -663,7 +663,7 @@ describe('Code generator', () => {
       testModule('function*f(){yield*yield*(yield)*(yield)}');
     });
 
-    it('ForOfStatement', () => {
+    test('ForOfStatement', () => {
       testModule('for(a of b);');
       testModule('for(a of(1,2));');
       testModule('for([a]of[b]);');
@@ -675,7 +675,7 @@ describe('Code generator', () => {
       testModule('for(a of(b,c));');
     });
 
-    it('LiteralNumericExpression', () => {
+    test('LiteralNumericExpression', () => {
       testModule('0');
       test2('0', '0x0');
       test2('0', '0o0');
@@ -716,13 +716,13 @@ describe('Code generator', () => {
       testModule('1e-308');
     });
 
-    it('LiteralInfinityExpression', () => {
+    test('LiteralInfinityExpression', () => {
       test2('2e308', '2e308');
       test2('1+2e308', '1+2e308');
       test2('2e308', '3e308');
     });
 
-    it('LiteralStringExpression', () => {
+    test('LiteralStringExpression', () => {
       testModule('("")');
       test2('("")', '(\'\')');
       test2('("a")', '(\'a\')');
@@ -734,31 +734,31 @@ describe('Code generator', () => {
       testModule('("\b\\n\\r\t\v\f\\\\\\"\'\\u2028\\u2029日本")');
     });
 
-    it('BlockStatement', () => {
+    test('BlockStatement', () => {
       testModule('{}');
       testModule('{{}}');
       testModule('{a:{}}');
       test2('{a;b}', '{a\nb\n}');
     });
 
-    it('BreakStatement', () => {
+    test('BreakStatement', () => {
       test2('while(1)break', 'while(1)break');
       test2('while(1){break;break}', 'while(1){break;break;}');
       test2('a:while(1){break;break a}', 'a:while(1){break;break a;}');
       test2('switch(1){case 1:break}', 'switch(1){case 1:break;}');
     });
 
-    it('ContinueStatement', () => {
+    test('ContinueStatement', () => {
       test2('while(1)continue', 'while(1)continue');
       test2('while(1){continue;continue}', 'while(1){continue;continue;}');
       test2('a:while(1){continue;continue a}', 'a:while(1){continue;continue a;}');
     });
 
-    it('DebuggerStatement', () => {
+    test('DebuggerStatement', () => {
       test2('debugger', 'debugger');
     });
 
-    it('DoWhileStatement', () => {
+    test('DoWhileStatement', () => {
       test2('do;while(1)', 'do;while(1)');
       test2('do{}while(1)', 'do{}while(1)');
       testModule('do debugger;while(1)');
@@ -766,7 +766,7 @@ describe('Code generator', () => {
       test2('do 3;while(1)', 'do(3);while(1)');
     });
 
-    it('ExpressionStatement', () => {
+    test('ExpressionStatement', () => {
       testModule('a');
       testModule('({a:3})');
       testModule('(function(){})');
@@ -785,7 +785,7 @@ describe('Code generator', () => {
       testModule('function name(){}');
     });
 
-    it('ForInStatement', () => {
+    test('ForInStatement', () => {
       testModule('for(var a in 1);');
       testScript('for((let)in 1);');
       testModule('for(a in 1);');
@@ -797,7 +797,7 @@ describe('Code generator', () => {
       testScript('for(var a=0 in 1);');
     });
 
-    it('ForStatement', () => {
+    test('ForStatement', () => {
       testModule('for(var i=(1 in[]);;);');
       testModule('for(var i=(1 in[]),b,c=(1 in[]);;);');
       testModule('for(var a=(b=>c in 0);;);');
@@ -810,7 +810,7 @@ describe('Code generator', () => {
       testModule('for(1*(1+(1 in[]));;);');
     });
 
-    it('IfStatement', () => {
+    test('IfStatement', () => {
       testModule('if(a);');
       testModule('if(a)b');
       testModule('if(a)if(a)b');
@@ -846,36 +846,36 @@ describe('Code generator', () => {
       );
     });
 
-    it('LabeledStatement', () => {
+    test('LabeledStatement', () => {
       testModule('a:;');
       testModule('a:b:;');
     });
 
-    it('ReturnStatement', () => {
+    test('ReturnStatement', () => {
       testModule('function a(){return}');
       testModule('function a(){return 0}');
       testModule('function a(){return function a(){return 0}}');
     });
 
-    it('SwitchStatement', () => {
+    test('SwitchStatement', () => {
       testModule('switch(0){}');
       testModule('switch(0){default:}');
       testModule('switch(0){case 0:default:}');
       testModule('switch(0){case 0:a;default:c:b}');
     });
 
-    it('ThrowStatement', () => {
+    test('ThrowStatement', () => {
       testModule('throw 0');
       testModule('throw(1<1)+1');
     });
 
-    it('TryStatement', () => {
+    test('TryStatement', () => {
       testModule('try{}catch(a){}');
       testModule('try{}catch(a){}finally{}');
       testModule('try{}finally{}');
     });
 
-    it('VariableDeclarationStatement', () => {
+    test('VariableDeclarationStatement', () => {
       testModule('var a=0');
       testModule('var a=0,b=0');
       testModule('var a=(0,0)');
@@ -885,18 +885,18 @@ describe('Code generator', () => {
       testModule('var a=""in{}');
     });
 
-    it('WhileStatement', () => {
+    test('WhileStatement', () => {
       testModule('while(0);');
       testModule('while(0)while(0);');
     });
 
-    it('WithStatement', () => {
+    test('WithStatement', () => {
       testShift('with(null);',
         statement({ type: 'WithStatement', object: { type: 'LiteralNullExpression' }, body: { type: 'EmptyStatement' } })
       );
     });
 
-    it('Import', () => {
+    test('Import', () => {
       testModule('import"m"');
       testModule('import"m";0');
       testModule('import a from"m"');
@@ -909,13 +909,13 @@ describe('Code generator', () => {
       test2('import a from"m"', 'import a,{}from "m"');
     });
 
-    it('ImportNamespace', () => {
+    test('ImportNamespace', () => {
       testModule('import*as a from"m"');
       testModule('import*as a from"m";0');
       testModule('import a,*as b from"m"');
     });
 
-    it('ImportSpecifier', () => {
+    test('ImportSpecifier', () => {
       testModule('import{a}from"m"');
       testModule('import{a}from"m";0');
       testModule('import{a as b}from"m"');
@@ -925,12 +925,12 @@ describe('Code generator', () => {
       testModule('import{a as b,c as d}from"m"');
     });
 
-    it('ExportAllFrom', () => {
+    test('ExportAllFrom', () => {
       testModule('export*from"m"');
       testModule('export*from"m";0');
     });
 
-    it('ExportFrom', () => {
+    test('ExportFrom', () => {
       testModule('export{}from"m"');
       testModule('export{}from"m";0');
       testModule('export{a}from"m"');
@@ -938,7 +938,7 @@ describe('Code generator', () => {
       testModule('export{a,b}from"m"');
     });
 
-    it('ExportLocals', () => {
+    test('ExportLocals', () => {
       testModule('export{}');
       testModule('export{};0');
       testModule('let a;export{a}');
@@ -946,7 +946,7 @@ describe('Code generator', () => {
       testModule('let a,b;export{a,b}');
     });
 
-    it('Export', () => {
+    test('Export', () => {
       testModule('export var a');
       testModule('export var a;0');
       testModule('export var a=0');
@@ -960,7 +960,7 @@ describe('Code generator', () => {
       testModule('export class A{}0');
     });
 
-    it('ExportDefault', () => {
+    test('ExportDefault', () => {
       testModule('export default function(){}');
       testModule('export default function(){}0');
       testModule('export default 0');
@@ -975,7 +975,7 @@ describe('Code generator', () => {
       testModule('export default(0,0)');
     });
 
-    it('ExportSpecifier', () => {
+    test('ExportSpecifier', () => {
       testModule('let a;export{a}');
       testModule('let a,b;export{a as b}');
       testModule('let a,b;export{a,b}');
@@ -984,26 +984,26 @@ describe('Code generator', () => {
       testModule('let a,b,c,d;export{a as b,c as d}');
     });
 
-    it('Module', () => {
+    test('Module', () => {
       testModule('');
       testModule('a;a');
     });
 
-    it('ComputedMemberAssignmentTarget', () => {
+    test('ComputedMemberAssignmentTarget', () => {
       testModule('(a.b++)[0]=1');
     });
 
-    it('ComputedPropertyName', () => {
+    test('ComputedPropertyName', () => {
       testModule('({[(0,0)]:0})');
     });
 
-    it('HTML comments', () => {
+    test('HTML comments', () => {
       testScript('a<! --b');
     });
   });
 });
 
-describe('Pretty code generator', () => {
+suite('Pretty code generator', () => {
   function testPretty(source, scriptMode) {
     let parseTest = scriptMode ? parseScript : parseModule;
     expect(codeGen(parseTest(source), new FormattedCodeGen)).be(source);
@@ -1017,56 +1017,56 @@ describe('Pretty code generator', () => {
     expect(codeGen(tree, new FormattedCodeGen)).eql(to);
   }
 
-  it('should output a newline after brace', () => {
+  test('should output a newline after brace', () => {
     testPretty('export default function () {\n  null;\n}\n');
   });
 
-  it('should output a newline after semiOp', () => {
+  test('should output a newline after semiOp', () => {
     testPretty('export const FOO = 123;\n');
   });
 
-  it('should output no newline after semi', () => {
+  test('should output no newline after semi', () => {
     testPretty('(function () {\n  for (var x = 0;;) {}\n});\n');
   });
 
-  it('should indent', () => {
+  test('should indent', () => {
     testPretty('function f() {\n  function g() {\n    null;\n    l: for (;;) {\n      break l;\n    }\n  }\n}\n');
   });
 
-  it('should insert spaces in expressions', () => {
+  test('should insert spaces in expressions', () => {
     testPretty('let [x, , y] = (0 + 1, {a: 2, b: 3}, (c, d) => (4, 5));\n');
   });
 
-  it('should insert spaces in statements', () => {
+  test('should insert spaces in statements', () => {
     testPretty('with ({}) {}\n', true);
   });
 
-  it('should put else and while inline', () => {
+  test('should put else and while inline', () => {
     testPretty('if (0) {} else {}\n');
     testPretty('do {} while (true);\n');
   });
 
-  it('should not output linebreaks after function expressions', () => {
+  test('should not output linebreaks after function expressions', () => {
     testPretty('(function () {});\n');
   });
 
-  it('should indent appropriately within expressions', () => {
+  test('should indent appropriately within expressions', () => {
     testPretty('[function () {\n  [function () {\n    let x = a in b;\n  }];\n}];\n');
   });
 
-  it('should add spaces to the appropriate unary operations', () => {
+  test('should add spaces to the appropriate unary operations', () => {
     testPretty('++x;\n--x;\n+[];\n-[];\n+[];\n![];\n~[];\nvoid [];\ntypeof [];\ndelete [];\n');
   });
 
-  it('should pretty-print switch statements', () => {
+  test('should pretty-print switch statements', () => {
     testPretty('switch (0) {\n  case 0:\n  case 1:\n    0;\n  default:\n    0;\n    0;\n  case 3:\n    0;\n    0;\n  case 4:\n}\n');
   });
 
-  it('should handle literal string expressions and directives properly', () => {
+  test('should handle literal string expressions and directives properly', () => {
     testPretty('\'"\';\n("expression");\n');
   });
 
-  it('should continue handling missing-else condition appropriately', () => {
+  test('should continue handling missing-else condition appropriately', () => {
     function statement(stmt) {
       return { type: 'Script', directives: [], statements: [stmt] };
     }
@@ -1080,22 +1080,22 @@ describe('Pretty code generator', () => {
     );
   });
 
-  it('should print the empty script as the empty script', () => {
+  test('should print the empty script as the empty script', () => {
     testPretty('', true);
   });
 
-  it('should print directives with linebreaks', () => {
+  test('should print directives with linebreaks', () => {
     testPretty('"use strict";\n!function () {\n  "use strict";\n};\n', true);
   });
 
-  it('should pretty-print exports', () => {
+  test('should pretty-print exports', () => {
     testPretty('export {a} from "b";\n');
     testPretty('let a;\nexport {a};\n');
   });
 });
 
-describe('CodeRep', () => {
-  it('should call forEach the appropriate number of times', () => {
+suite('CodeRep', () => {
+  test('should call forEach the appropriate number of times', () => {
     let tree = reduce(new MinimalCodeGen, parseModule('f(0,1,(2,3))'));
     let count = 0;
     tree.forEach(() => {
