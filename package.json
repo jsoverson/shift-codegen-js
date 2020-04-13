@@ -1,5 +1,5 @@
 {
-  "name": "shift-codegen",
+  "name": "@jsoverson/shift-codegen",
   "version": "7.0.0",
   "description": "code generator for Shift format ASTs",
   "author": "Shape Security",

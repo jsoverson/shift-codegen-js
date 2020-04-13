@@ -370,7 +370,6 @@ export class CommaSep extends CodeRep {
 
   forEach(f) {
     f(this);
-    // this.children.forEach(x => x.forEach(f));
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].forEach(f);
     }
